@@ -5,6 +5,7 @@
 #include "openfhe.h"
 #include <random>
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <chrono> 
 #include <omp.h> 
@@ -27,6 +28,8 @@ int main() {
 	//uint32_t batchSize = 64; //power of two numbers: 1, 2, 4, 8, 16, 32, 64, 128, 256, 512
 	int i, j;
 	int id = 100;
+
+	std::string fname;
 
 	// Clinical dataset size
 	int n_patients = 3691;
@@ -86,13 +89,23 @@ int main() {
 
 	start = high_resolution_clock::now();
 	std::cout << "Serializing first vector to file" << std::endl;
-    	if(!Serial::SerializeToFile("vector.txt", ct_[0], SerType::BINARY)) {
-      		std::cout << "Error writing to vector.txt" << std::endl;
+    	if(!Serial::SerializeToFile("vector_0", ct_[0], SerType::BINARY)) {
+      		std::cout << "Error writing to vector_0" << std::endl;
     	}
 	stop = high_resolution_clock::now();
 	auto duration2 = duration_cast<microseconds>( stop - start );
 	std::cout << "Time required to serialize and store one vector: " << duration2.count() << " [us]" << std::endl;
 
+	std::cout << "Serializing rest of the vectors" << std::endl;
+
+        #pragma omp parallel for
+        for (i=1; i<n_variables; i++) {
+                fname = "vector_" + std::to_string(i);
+                if(!Serial::SerializeToFile(fname, ct_[i], SerType::BINARY)) {
+                         std::cout << "Error writing to " << fname << std::endl;
+                }
+        }
+	
 	std::vector<double> request, verification;
 
 	// opt-out algorithm
