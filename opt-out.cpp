@@ -22,12 +22,12 @@ using Private_Key = PrivateKey<DCRTPoly>;   // secret key of par.
 using Public_Key = PublicKey<DCRTPoly>;     // public key of par.
 using vecInt = std::vector<int64_t>;        // vector of intts
 
-int main() {
+int main(int argc, char const *argv[]) {
 	uint32_t multDepth = 2;
 	uint32_t scaleFactorBits = 56;
 	//uint32_t batchSize = 64; //power of two numbers: 1, 2, 4, 8, 16, 32, 64, 128, 256, 512
 	int i, j;
-	int id = 100;
+	int id = std::stoi(argv[1]);
 
 	std::string fname;
 
