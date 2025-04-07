@@ -1,3 +1,6 @@
+// @author: Miroslav Puskaric https://github.com/mpuskaric
+//
+
 #include "ciphertext-ser.h"
 #include "cryptocontext-ser.h"
 #include "key/key-ser.h"
